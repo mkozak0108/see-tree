@@ -1,0 +1,104 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../services/all-categories.html">
+
+<dom-module id="issues-filter">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        padding: 1em 2em;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        z-index: 1;
+        position: relative;
+      }
+
+      .input-label {
+        display: block;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin: 0.5em 0;
+      }
+
+      .filter-label {
+        cursor: pointer;
+        margin-right: 0.2em;
+      }
+
+      .Nutrients {
+        color: #7E013F;
+      }
+
+      .Disease {
+        color: #26B99A;
+      }
+
+      .Other {
+        color: #E79E2D;
+      }
+
+      .Pests {
+        color: #7ADD8B;
+      }
+
+      .Missing {
+        color: #933EC5;
+      }
+
+      .Water {
+        color: #3CAED6;
+      }
+
+      .search-input {
+        padding: 0.5em 1em;
+        border-width: 2px;
+      }
+    </style>
+
+    <div>
+      <label class="input-label">Search</label>
+      <input class="search-input" type="text" value="{{search::input}}">
+    </div>
+    <div>
+      <label class="input-label">Categories</label>
+      <template is="dom-repeat" items="[[availableCategories]]">
+        <label class$="filter-label [[item.name]]">
+          <input type="checkbox" name="[[item.name]]" checked="[[item.checked]]" on-change="_changeCategory"/>
+          <span>[[item.name]]</span>
+        </label>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'issues-filter',
+      properties: {
+        search: {
+          type: String,
+          notify: true
+        },
+        categories: {
+          type: Array,
+          notify: true
+        },
+        availableCategories: {
+          type: Array,
+          value: getAllCategories().map(name => ({ name, checked: true }))
+        }
+      },
+
+      _changeCategory(event) {
+        const changedCategory = this.availableCategories.find(category => category.name === event.target.name);
+
+        changedCategory.checked = !changedCategory.checked;
+
+        this.set('categories',
+          this.availableCategories.filter(category => category.checked)
+            .map(category => category.name)
+        );
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,78 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="google-map">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: absolute;
+        top: 6em;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+
+      #google-map-container {
+        height: 100%;
+      }
+    </style>
+    <div id="google-map-container">
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'google-map',
+      properties: {
+        center: Object,
+        zoom: Number,
+        markers: {
+          type: Array,
+          value: [],
+          observer: '_markersChanged'
+        },
+        googleMarkers: {
+          type: Array,
+          value: []
+        },
+        map: Object
+      },
+
+      ready() {
+        this.map = new window.google.maps.Map(this.$['google-map-container'], {
+          center: this.center,
+          zoom: this.zoom
+        });
+      },
+
+      initGoogleMarkers() {
+        return this.markers.map(marker => {
+          const infoWindow = new google.maps.InfoWindow({
+              content: `
+                <div style="overflow: hidden">
+                  <h1>${marker.info}</h1>
+                  <span>${marker.description}</span>
+                </div>
+            `
+            }),
+            googleMarker = new google.maps.Marker({
+              position: marker.position,
+              map: this.map,
+              icon: marker.image
+            });
+
+          googleMarker.addListener('mouseover', () => infoWindow.open(this.map, googleMarker));
+          googleMarker.addListener('mouseout', () => infoWindow.close());
+          googleMarker.addListener('click', () => marker.onClick());
+
+          return googleMarker;
+        });
+      },
+
+      _markersChanged() {
+        this.googleMarkers.forEach(googleMarker => googleMarker.setMap(null));
+        this.googleMarkers = this.initGoogleMarkers();
+      }
+    });
+  </script>
+</dom-module>
