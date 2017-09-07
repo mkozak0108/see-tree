@@ -51,7 +51,7 @@
         </template>
       </select>
       <button>Save</button>
-      <span class="caption">Currently selected: [[selected-count]]</span>
+      <span class="caption">Currently selected: [[selectedCount]]</span>
     </form>
   </template>
 
@@ -72,8 +72,7 @@
           reflectToAttribute: true,
           value: false
         },
-        'on-submit': String,
-        'selected-count': Number
+        'selectedCount': Number
       },
 
       _onSubmit(event) {

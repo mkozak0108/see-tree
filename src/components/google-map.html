@@ -12,6 +12,13 @@
         right: 0;
       }
 
+      h1 {
+        font-weight: bold;
+        font-size: 175%;
+        margin-bottom: 0.5em;
+        margin-top: 0;
+      }
+
       #google-map-container {
         height: 100%;
       }
@@ -41,7 +48,8 @@
       ready() {
         this.map = new window.google.maps.Map(this.$['google-map-container'], {
           center: this.center,
-          zoom: this.zoom
+          zoom: this.zoom,
+          mapTypeId: 'terrain'
         });
       },
 

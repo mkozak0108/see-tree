@@ -2,7 +2,7 @@
 <link rel="import" href="components/google-map.html">
 <link rel="import" href="components/issues-filter.html">
 <link rel="import" href="components/issues-category-form.html">
-<link rel="import" href="services/get-issues.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 
 <dom-module id="see-tree-app">
@@ -17,7 +17,7 @@
         bottom: 0;
       }
     </style>
-    <get-issues on-response="_handleIssues"></get-issues>
+    <iron-ajax auto url="[[url]]" handle-as="json" on-response="_handleIssues"></iron-ajax>
     <issues-filter search="{{search}}" categories="{{selectedCategories}}"></issues-filter>
     <google-map zoom="18" center='{ "lat": 34.958, "lng": 32.402 }' markers="{{issueMarkers}}"></google-map>
     <issues-category-form selected-count="[[_currentlySelected(issues)]]" shown="[[_checkIfFormIsShown(issues)]]" on-submit="_changeCategory"></issues-category-form>
@@ -30,6 +30,10 @@
         issues: Array,
         selectedCategories: Array,
         search: String,
+        url: {
+          type: String,
+          value: 'https://us-central1-seetree-proto.cloudfunctions.net/getIssues?category=all&root=Ahituv/'
+        },
         filteredIssues: {
           type: Array,
           computed: '_filterIssues(issues, selectedCategories)'
