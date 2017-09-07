@@ -1,7 +1,0 @@
-{
-  "name": "SeeTree",
-  "short_name": "SeeTree",
-  "description": "SeeTree map ",
-  "start_url": "/",
-  "display": "standalone"
-}
